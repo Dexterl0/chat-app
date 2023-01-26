@@ -10,7 +10,7 @@ const ChatMain = ({ chatVisible, setChatVisible }) => {
                     <UserIcon />
                 </div>
                 <p className="chat-name">John Smith</p>
-                <span class={chatVisible ? "material-symbols-outlined chat-back" : "material-symbols-outlined chat-back not-visible"} onClick={() => setChatVisible(false)}>
+                <span className={chatVisible ? "material-symbols-outlined chat-back" : "material-symbols-outlined chat-back not-visible"} onClick={() => setChatVisible(false)}>
                     arrow_back
                 </span>
             </div>

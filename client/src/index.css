@@ -446,6 +446,7 @@
 
 .login-button {
   margin-top: 25px;
+  margin-bottom: 25px;
   font-size: 15px;
   height: 56px;
   width: 65%;
@@ -464,6 +465,14 @@
 
 .login-button:active {
   background-color: var(--green-active);
+}
+
+.login-back {
+  color: var(--green-dark-2);
+  font-size: 40px;
+  cursor: pointer;
+  user-select: none;
+  margin-top: 25px;
 }
 
 /* --- Signup Page --- */
@@ -507,7 +516,7 @@
 }
 
 .signup-email {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   margin-top: 35px;
   padding-left: 20px;
   padding-right: 20px;
@@ -526,8 +535,8 @@
 }
 
 .signup-username {
-  margin-bottom: 25px;
-  margin-top: 25px;
+  margin-bottom: 20px;
+  margin-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
   border-radius: 10px;
@@ -545,8 +554,8 @@
 }
 
 .signup-password {
-  margin-top: 25px;
-  margin-bottom: 25px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   padding-left: 20px;
   padding-right: 20px;
   border-radius: 10px;
@@ -564,8 +573,8 @@
 }
 
 .signup-confirm {
-  margin-top: 25px;
-  margin-bottom: 25px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   padding-left: 20px;
   padding-right: 20px;
   border-radius: 10px;
@@ -583,7 +592,8 @@
 }
 
 .signup-button {
-  margin-top: 25px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   font-size: 15px;
   height: 56px;
   width: 65%;
@@ -602,6 +612,14 @@
 
 .signup-button:active {
   background-color: var(--green-active);
+}
+
+.signup-back {
+  color: var(--green-dark-2);
+  font-size: 40px;
+  cursor: pointer;
+  user-select: none;
+  margin-top: 8px;
 }
 
 /* --- Homepage --- */
