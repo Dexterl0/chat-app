@@ -6,7 +6,10 @@ const messageController = require('../controllers/messageController');
 // Add message
 router.post("/", messageController.new_message);
 
-// Get message
+// Get messages
 router.get("/:chatId", messageController.get_messages);
+
+// Get single message
+router.get("/message/:messageId", messageController.get_message);
 
 module.exports = router;

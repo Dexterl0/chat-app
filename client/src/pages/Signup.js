@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { url } from '../Url';
+import AuthContext from '../context/AuthContext';
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -12,15 +13,19 @@ const Signup = () => {
 
   const navigate = useNavigate();
 
+  const { getUser } = useContext(AuthContext);
+
   const signup = async () => {
     try {
+      { /* Create signupData object from the submitted email, username, password and confirmPassword */ }
       const signupData = {
-        username,
         email,
+        username,
         password,
         confirmPassword
       };
 
+      { /* Send signupData to create user */ }
       const res = await fetch(`${url}/api/user/signup`,
         {
           method: 'POST',
@@ -34,6 +39,8 @@ const Signup = () => {
       if (resJson.error) {
         setError(resJson.error);
       } else {
+        { /* If Successful, check user is logged in and redirect to chat page */ }
+        await getUser();
         navigate('/chat');
       }
     } catch (err) {

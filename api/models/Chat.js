@@ -3,9 +3,10 @@ const Schema = mongoose.Schema;
 
 const ChatSchema = new Schema(
     {
-        users: {
-            type: Array,
-        },
+        userIds: [Schema.Types.ObjectId],
+        usernames: [String],
+        messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
+        hasRead: [{ userId: { type: Schema.Types.ObjectId }, unread: { type: Boolean } }]
     },
     { timestamps: true }
 );

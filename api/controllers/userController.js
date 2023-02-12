@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const User = require('../models/user');
+const User = require('../models/User');
 
 exports.signup = async (req, res) => {
     const { email, username, password, confirmPassword } = req.body;
@@ -45,7 +45,8 @@ exports.signup = async (req, res) => {
 
     // Create jwt token
     const token = jwt.sign({
-        _id: savedUser._id
+        _id: savedUser._id,
+        username: savedUser.username
     }, process.env.JWT_SECRET);
 
     // Return token cookie and success message
@@ -90,7 +91,8 @@ exports.login = async (req, res) => {
 
     // Create jwt token
     const token = jwt.sign({
-        _id: existingUser._id
+        _id: existingUser._id,
+        username: existingUser.username
     }, process.env.JWT_SECRET);
 
     // Return token cookie and success message
@@ -118,26 +120,32 @@ exports.logout = (req, res) => {
 
 exports.loggedIn = (req, res) => {
     try {
-        const token = req.cookie.token;
+        const token = req.cookies.token;
 
         // If there is no token cookie, return _id as an empty string
         if (!token) {
             return res.status(400).json({
-                _id: ""
+                user: {
+                    _id: "",
+                    username: ""
+                }
             });
         }
 
         // Verify token and store in variable
-        const _id = jwt.verify(token, process.env.JWT_SECRET);
+        const user = jwt.verify(token, process.env.JWT_SECRET);
 
         // Return _id from verified token
         res.status(200).json({
-            _id
+            user
         });
 
     } catch (err) {
         res.status(400).json({
-            _id: ""
+            user: {
+                _id: "",
+                username: ""
+            }
         });
     }
 };
