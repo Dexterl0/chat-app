@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
-const Navbar = ({ chatVisible, setNewChatTabOpen, settingsTabOpen, setSettingsTabOpen }) => {
-    const [navbarActive, setNavbarActive] = useState("chats");
+const Navbar = ({ chatVisible, setNewChatTabOpen, settingsTabOpen, setSettingsTabOpen, navbarActive, setNavbarActive }) => {
 
     return (
         <div className={chatVisible ? "navbar not-visible" : "navbar"}>
@@ -13,17 +12,12 @@ const Navbar = ({ chatVisible, setNewChatTabOpen, settingsTabOpen, setSettingsTa
             <ul className="navbar-list">
                 <li onClick={() => { setNewChatTabOpen(true); setSettingsTabOpen(false); setNavbarActive("new") }}>
                     <span className={navbarActive === "new" ? "material-symbols-outlined navbar-active" : "material-symbols-outlined"}>
-                        edit
+                        add
                     </span>
                 </li>
                 <li onClick={() => { setNewChatTabOpen(false); setSettingsTabOpen(false); setNavbarActive("chats") }}>
                     <span className={navbarActive === "chats" ? "material-symbols-outlined navbar-active" : "material-symbols-outlined"}>
                         chat_bubble
-                    </span>
-                </li>
-                <li>
-                    <span className="material-symbols-outlined">
-                        light_mode
                     </span>
                 </li>
                 <li onClick={() => {setSettingsTabOpen(!settingsTabOpen); setNavbarActive("settings")}}>

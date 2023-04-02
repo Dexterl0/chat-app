@@ -4,11 +4,9 @@ import Sidebar from '../components/Sidebar'
 import ChatMain from '../components/ChatMain'
 import { url } from '../Url'
 import AuthContext from '../context/AuthContext'
-import { io } from 'socket.io-client'
+// import socket from '../socket'
 
-const socket = io('http://localhost:3000', { autoConnect: false })
-
-const Chat = () => {
+const Chat = ({ socket }) => {
     const [chatVisible, setChatVisible] = useState(false);
     const [chats, setChats] = useState([]);
     const [currentChat, setCurrentChat] = useState(null);
@@ -20,32 +18,49 @@ const Chat = () => {
     const [userList, setUserList] = useState([]);
     const [searchFilter, setSearchFilter] = useState("");
     const [settingsTabOpen, setSettingsTabOpen] = useState(false);
+    const [navbarActive, setNavbarActive] = useState("chats");
 
     const { userId } = useContext(AuthContext);
 
     // Get all users & current users chats
+    const getChats = async () => {
+        try {
+            const res = await fetch(`${url}/api/chat/${userId}`);
+            const resJson = await res.json();
+            setChats(resJson);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const getUsers = async () => {
+        try {
+            const res = await fetch(`${url}/api/user/userlist/${userId}`);
+            const resJson = await res.json();
+            setUserList(resJson.users);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     useEffect(() => {
-        const getChats = async () => {
-            try {
-                const res = await fetch(`${url}/api/chat/${userId}`);
-                const resJson = await res.json();
-                setChats(resJson);
-            } catch (err) {
-                console.error(err);
-            }
-        };
-        const getUsers = async () => {
-            try {
-                const res = await fetch(`${url}/api/user/userlist/${userId}`);
-                const resJson = await res.json();
-                setUserList(resJson.users);
-            } catch (err) {
-                console.error(err);
-            }
-        };
         getChats();
         getUsers();
-    }, [userId, chats]);
+    }, [userId]);
+
+    // Socket IO Message event listener
+    useEffect(() => {
+        socket.on("message", ({ data, from }) => {
+            if (currentChat && currentChat.userIds.includes(from)) {
+                setMessages([data, ...messages]);
+            }
+            getChats();
+        });
+
+        return () => {
+            socket.off("message");
+        }
+    }, [currentChat, messages]);
 
     return (
         <div className="chat-container">
@@ -54,11 +69,14 @@ const Chat = () => {
                 setNewChatTabOpen={setNewChatTabOpen}
                 setSettingsTabOpen={setSettingsTabOpen}
                 settingsTabOpen={settingsTabOpen}
+                navbarActive={navbarActive}
+                setNavbarActive={setNavbarActive}
             />
             <Sidebar
                 chatVisible={chatVisible}
                 setChatVisible={setChatVisible}
                 newChatTabOpen={newChatTabOpen}
+                setNewChatTabOpen={setNewChatTabOpen}
                 settingsTabOpen={settingsTabOpen}
                 searchFilter={searchFilter}
                 setSearchFilter={setSearchFilter}
@@ -68,6 +86,9 @@ const Chat = () => {
                 setCurrentChat={setCurrentChat}
                 setNewChat={setNewChat}
                 messages={messages}
+                setNavbarActive={setNavbarActive}
+                getChats={getChats}
+                socket={socket}
             />
             <ChatMain
                 chatVisible={chatVisible}
@@ -82,7 +103,10 @@ const Chat = () => {
                 setNewChat={setNewChat}
                 chats={chats}
                 setChats={setChats}
+                newChatTabOpen={newChatTabOpen}
                 setNewChatTabOpen={setNewChatTabOpen}
+                setNavbarActive={setNavbarActive}
+                socket={socket}
             />
         </div>
     )

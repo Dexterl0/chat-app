@@ -4,7 +4,7 @@ import AuthContext from '../context/AuthContext'
 import ChatPreview from './ChatPreview'
 import { url } from '../Url'
 
-const Sidebar = ({ chatVisible, setChatVisible, newChatTabOpen, settingsTabOpen, searchFilter, setSearchFilter, chats, userList, setCurrentChat, setNewChat, messages }) => {
+const Sidebar = ({ chatVisible, setChatVisible, newChatTabOpen, setNewChatTabOpen, settingsTabOpen, searchFilter, setSearchFilter, chats, userList, currentChat, setCurrentChat, setNewChat, messages, setNavbarActive, getChats, socket }) => {
     const { getUser, username, userId } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -38,7 +38,7 @@ const Sidebar = ({ chatVisible, setChatVisible, newChatTabOpen, settingsTabOpen,
                                     /* Filter chats based on the search filter
                                     If the other users username starts with the value in the search filter, return ChatPreview component with chat data properties  */
                                     if (otherUser[0].toLowerCase().startsWith(searchFilter.toLowerCase())) {
-                                        return <ChatPreview key={c._id} chat={c} setChatVisible={setChatVisible} setCurrentChat={setCurrentChat} setNewChat={setNewChat} messages={messages} />;
+                                        return <ChatPreview key={c._id} chat={c} setChatVisible={setChatVisible} currentChat={setCurrentChat} setCurrentChat={setCurrentChat} setNewChat={setNewChat} messages={messages} newChatTabOpen={newChatTabOpen} setNewChatTabOpen={setNewChatTabOpen} setNavbarActive={setNavbarActive} getChats={getChats} socket={socket} />;
                                     }
                                 })
                             }
@@ -63,7 +63,7 @@ const Sidebar = ({ chatVisible, setChatVisible, newChatTabOpen, settingsTabOpen,
                                     /* Filter users based on the search filter
                                     If the other users username starts with the value in the search filter, return ChatPreview component with user data properties */
                                     if (u.username.toLowerCase().startsWith(searchFilter.toLowerCase())) {
-                                        return <ChatPreview key={u._id} user={u} setChatVisible={setChatVisible} setNewChat={setNewChat} setCurrentChat={setCurrentChat} chats={chats} />;
+                                        return <ChatPreview key={u._id} user={u} setChatVisible={setChatVisible} setNewChat={setNewChat} currentChat={currentChat} setCurrentChat={setCurrentChat} chats={chats} newChatTabOpen={newChatTabOpen} setNewChatTabOpen={setNewChatTabOpen} setNavbarActive={setNavbarActive} getChats={getChats} socket={socket} />;
                                     }
                                 })
                             }
@@ -73,7 +73,11 @@ const Sidebar = ({ chatVisible, setChatVisible, newChatTabOpen, settingsTabOpen,
                 /* If settings is open, show the settings sidebar */
                 <div className={chatVisible ? "sidebar not-visible" : "sidebar"}>
                     <h1 className="sidebar-title">Settings</h1>
-                    <button onClick={() => logout()}>Logout</button>
+                    <ul className="settings-list">
+                        <li className="settings-list-item">
+                            <button className="logout-button" onClick={() => logout()}>Logout</button>
+                        </li>
+                    </ul>
                 </div>
             }
         </>

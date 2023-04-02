@@ -3,7 +3,7 @@ import UserIcon from './UserIcon'
 import AuthContext from '../context/AuthContext'
 import { url } from '../Url'
 
-const ChatPreview = ({ setChatVisible, chat, user, currentChat, setCurrentChat, setNewChat, chats, messages }) => {
+const ChatPreview = ({ setChatVisible, chat, user, currentChat, setCurrentChat, setNewChat, chats, messages, newChatTabOpen, setNewChatTabOpen, setNavbarActive, getChats, setOtherUser, socket }) => {
     const [recentMessage, setRecentMessage] = useState();
     const [unread, setUnread] = useState(false);
 
@@ -34,13 +34,17 @@ const ChatPreview = ({ setChatVisible, chat, user, currentChat, setCurrentChat, 
                 userId
             };
 
-            await fetch(`${url}/api/chat/setHasRead`,
+            const res = await fetch(`${url}/api/chat/setHasRead`,
                 {
                     method: 'POST',
                     credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(hasReadData)
                 });
+            const resJson = await res.json();
+            const read = resJson.updatedChat.hasRead.find((u) => u.userId.toString() === userId);
+            setUnread(read.unread);
+            getChats();
         } catch (err) {
             console.error(err);
         }

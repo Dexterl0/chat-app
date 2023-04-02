@@ -59,8 +59,10 @@ exports.set_hasRead = async (req, res) => {
             }
         });
         // Save the modified chat to database
-        chat.save();
-        res.status(200);
+        const updatedChat = await chat.save();
+        res.status(200).json({
+            updatedChat
+        });
     } catch (err) {
         res.status(500).json(err);
     }

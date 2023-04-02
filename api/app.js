@@ -15,8 +15,30 @@ const io = new Server(httpServer, {
 require('dotenv').config();
 
 // Socket.io
+io.use((socket, next) => {
+    console.log("WOKRING");
+    const username = socket.handshake.auth.username;
+    const userId = socket.handshake.auth.userId;
+    if (!username || !userId) {
+        return next(new Error("Invalid username or userId"));
+    }
+    socket.username = username;
+    socket.userId = userId;
+    next();
+});
+
 io.on('connection', (socket) => {
-    console.log(`${socket.id} user just connected`);
+    console.log(`User just connected SocketID: ${socket.id}, userId: ${socket.userId}`);
+
+    socket.join(socket.userId);
+
+    socket.on("message", ({ data, to }) => {
+        socket.to(to).emit("message", {
+            data,
+            from: socket.userId,
+        });
+    });
+
     socket.on('disconnect', () => {
         console.log('A user disconnected');
     });

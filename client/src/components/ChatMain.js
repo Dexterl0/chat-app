@@ -3,12 +3,14 @@ import UserIcon from './UserIcon'
 import ChatMessage from './ChatMessage'
 import AuthContext from '../context/AuthContext'
 import { url } from '../Url'
+// import socket from '../socket'
 
-const ChatMain = ({ chatVisible, setChatVisible, currentChat, setCurrentChat, messages, setMessages, newMessage, setNewMessage, newChat, setNewChat, chats, setChats, setNewChatTabOpen }) => {
+const ChatMain = ({ chatVisible, setChatVisible, currentChat, setCurrentChat, messages, setMessages, newMessage, setNewMessage, newChat, setNewChat, chats, setChats, newChatTabOpen, setNewChatTabOpen, setNavbarActive, socket }) => {
     const { username, userId } = useContext(AuthContext);
     /* If there is a currentChat property, find the username that is not equal to the current user and store in name variable.
     Otherwise name should be an empty string */
     const name = currentChat ? currentChat.usernames.find((u) => u !== username) : newChat ? newChat.username : "";
+    const receiverId = currentChat ? currentChat.userIds.find((u) => u !== userId) : newChat ? newChat.id : null;
 
     /* Get the messages associated with the current chat */
     const getMessages = async () => {
@@ -36,8 +38,19 @@ const ChatMain = ({ chatVisible, setChatVisible, currentChat, setCurrentChat, me
                     });
 
                 const resJson = await res.json();
+
                 setNewMessage("");
                 setMessages([resJson, ...messages]);
+                if (newChatTabOpen) {
+                    setNewChatTabOpen(false);
+                    setNavbarActive("chats");
+                }
+
+                /* Emit Socket Io message event */
+                socket.emit("message", {
+                    data: resJson,
+                    to: receiverId,
+                });
             } catch (err) {
                 console.error(err);
             }
@@ -62,6 +75,7 @@ const ChatMain = ({ chatVisible, setChatVisible, currentChat, setCurrentChat, me
             setNewChat(null);
             setChats([...chats, chatResJson]);
             setNewChatTabOpen(false);
+            setNavbarActive("chats")
         } catch (err) {
             console.error(err);
         }
