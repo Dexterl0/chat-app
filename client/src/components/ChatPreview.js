@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import UserIcon from './UserIcon'
 import AuthContext from '../context/AuthContext'
-import { url } from '../Url'
 
 const ChatPreview = ({ setChatVisible, chat, user, currentChat, setCurrentChat, setNewChat, chats, messages, newChatTabOpen, setNewChatTabOpen, setNavbarActive, getChats, setOtherUser, socket }) => {
     const [recentMessage, setRecentMessage] = useState();
@@ -34,7 +33,7 @@ const ChatPreview = ({ setChatVisible, chat, user, currentChat, setCurrentChat, 
                 userId
             };
 
-            const res = await fetch(`${url}/api/chat/setHasRead`,
+            const res = await fetch(`${process.env.REACT_APP_URL}/api/chat/setHasRead`,
                 {
                     method: 'POST',
                     credentials: 'include',

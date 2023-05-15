@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react'
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
 import ChatMain from '../components/ChatMain'
-import { url } from '../Url'
 import AuthContext from '../context/AuthContext'
 // import socket from '../socket'
 
@@ -25,7 +24,7 @@ const Chat = ({ socket }) => {
     // Get all users & current users chats
     const getChats = async () => {
         try {
-            const res = await fetch(`${url}/api/chat/${userId}`);
+            const res = await fetch(`${process.env.REACT_APP_URL}/api/chat/${userId}`);
             const resJson = await res.json();
             setChats(resJson);
         } catch (err) {
@@ -35,7 +34,7 @@ const Chat = ({ socket }) => {
 
     const getUsers = async () => {
         try {
-            const res = await fetch(`${url}/api/user/userlist/${userId}`);
+            const res = await fetch(`${process.env.REACT_APP_URL}/api/user/userlist/${userId}`);
             const resJson = await res.json();
             setUserList(resJson.users);
         } catch (err) {

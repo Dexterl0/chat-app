@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { url } from '../Url';
 import AuthContext from '../context/AuthContext';
 
 const Login = () => {
@@ -22,7 +21,7 @@ const Login = () => {
             };
 
             { /* Send loginData to authenticate login */ }
-            const res = await fetch(`${url}/api/user/login`,
+            const res = await fetch(`${process.env.REACT_APP_URL}/api/user/login`,
                 {
                     method: 'POST',
                     credentials: 'include',

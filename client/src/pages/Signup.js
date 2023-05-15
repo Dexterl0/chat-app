@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { url } from '../Url';
 import AuthContext from '../context/AuthContext';
 
 const Signup = () => {
@@ -26,7 +25,7 @@ const Signup = () => {
       };
 
       { /* Send signupData to create user */ }
-      const res = await fetch(`${url}/api/user/signup`,
+      const res = await fetch(`${process.env.REACT_APP_URL}/api/user/signup`,
         {
           method: 'POST',
           credentials: 'include',

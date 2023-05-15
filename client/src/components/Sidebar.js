@@ -2,14 +2,13 @@ import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AuthContext from '../context/AuthContext'
 import ChatPreview from './ChatPreview'
-import { url } from '../Url'
 
 const Sidebar = ({ chatVisible, setChatVisible, newChatTabOpen, setNewChatTabOpen, settingsTabOpen, searchFilter, setSearchFilter, chats, userList, currentChat, setCurrentChat, setNewChat, messages, setNavbarActive, getChats, socket }) => {
     const { getUser, username, userId } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const logout = async () => {
-        await fetch(`${url}/api/user/logout`, { credentials: 'include' });
+        await fetch(`${process.env.REACT_APP_URL}/api/user/logout`, { credentials: 'include' });
         getUser();
         navigate('/');
     }

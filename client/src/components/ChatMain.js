@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react'
 import UserIcon from './UserIcon'
 import ChatMessage from './ChatMessage'
 import AuthContext from '../context/AuthContext'
-import { url } from '../Url'
 // import socket from '../socket'
 
 const ChatMain = ({ chatVisible, setChatVisible, currentChat, setCurrentChat, messages, setMessages, newMessage, setNewMessage, newChat, setNewChat, chats, setChats, newChatTabOpen, setNewChatTabOpen, setNavbarActive, socket }) => {
@@ -14,7 +13,7 @@ const ChatMain = ({ chatVisible, setChatVisible, currentChat, setCurrentChat, me
 
     /* Get the messages associated with the current chat */
     const getMessages = async () => {
-        const res = await fetch(`${url}/api/message/${currentChat._id}`);
+        const res = await fetch(`${process.env.REACT_APP_URL}/api/message/${currentChat._id}`);
         const resJson = await res.json();
         setMessages(resJson);
     }
@@ -29,7 +28,7 @@ const ChatMain = ({ chatVisible, setChatVisible, currentChat, setCurrentChat, me
                     text: newMessage
                 };
 
-                const res = await fetch(`${url}/api/message/`,
+                const res = await fetch(`${process.env.REACT_APP_URL}/api/message/`,
                     {
                         method: 'POST',
                         credentials: 'include',
@@ -63,7 +62,7 @@ const ChatMain = ({ chatVisible, setChatVisible, currentChat, setCurrentChat, me
                 senderId: userId,
                 receiverId: newChat.id
             };
-            const chatRes = await fetch(`${url}/api/chat/`,
+            const chatRes = await fetch(`${process.env.REACT_APP_URL}/api/chat/`,
                 {
                     method: 'POST',
                     credentials: 'include',

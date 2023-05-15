@@ -1,5 +1,4 @@
 import React, { useState, useEffect, createContext } from 'react'
-import { url } from '../Url';
 
 const AuthContext = createContext();
 
@@ -8,7 +7,7 @@ const AuthContextProvider = (props) => {
     const [username, setUsername] = useState(null);
 
     const getUser = async () => {
-        const res = await fetch(`${url}/api/user/loggedin`, { credentials: 'include' });
+        const res = await fetch(`${process.env.REACT_APP_URL}/api/user/loggedin`, { credentials: 'include' });
         const resJson = await res.json();
         setUserId(resJson.user._id);
         setUsername(resJson.user.username);
