@@ -8,7 +8,7 @@ const { Server } = require('socket.io');
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
-        origin: "http://localhost:3000"
+        origin: process.env.CLIENT_URL
     }
 });
 
@@ -16,7 +16,6 @@ require('dotenv').config();
 
 // Socket.io
 io.use((socket, next) => {
-    console.log("WOKRING");
     const username = socket.handshake.auth.username;
     const userId = socket.handshake.auth.userId;
     if (!username || !userId) {
@@ -52,7 +51,7 @@ mongoose.connect(process.env.DB);
 
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: process.env.CLIENT_URL,
     credentials: true,
     optionsSuccessStatus: 200
 }));
